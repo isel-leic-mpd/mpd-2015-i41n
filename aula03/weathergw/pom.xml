@@ -18,5 +18,5 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
-    <name>isel-mpd-aula02-weathergw</name>
+    <name>aula03</name>
 </project>
