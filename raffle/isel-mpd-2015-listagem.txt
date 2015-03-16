@@ -14,7 +14,7 @@
 |35368|Joao David Sebastiao de Deus|0|0|
 |35383|FLÁVIO FERNANDO CADETE BALADÃO|0|0|
 |35390|João Paulo Pedro Vinhais|0|0|
-|35460|JOEL FERNANDO PIRES RODRIGUES|0|0|
+|35460|JOEL FERNANDO PIRES RODRIGUES|1|0|
 |36238|Diogo Rafael Esteves Poeira|0|0|
 |36830|Mariana Filipe Nascimento Santos|0|0|
 |36832|PEDRO MIGUEL JORGE DUARTE|0|0|
@@ -41,7 +41,7 @@
 |39246|Pedro Miguel de Sousa Silva|1|0|
 |39252|Tiago Calixto Pires Pedreira Cardoso|0|0|
 |39256|Catarina Alexandra Lopes Mendes|0|0|
-|39265|José António Alves Miranda|0|0|
+|39265|José António Alves Miranda|1|10|
 |39303|Romil Harsadecumar Naggi|0|0|
 |39333|Pedro Miguel Perestrelo Santana|0|0|
 |39368|HOMÍLZIO TROVOADA DOS SANTOS|1|0|
