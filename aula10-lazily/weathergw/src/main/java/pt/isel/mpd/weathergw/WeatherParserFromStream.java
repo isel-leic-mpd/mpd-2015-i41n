@@ -16,6 +16,8 @@
  */
 package pt.isel.mpd.weathergw;
 
+import java.io.InputStream;
+import static java.lang.ClassLoader.getSystemResourceAsStream;
 import pt.isel.mpd.util.FileParser;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -26,15 +28,13 @@ import java.util.List;
  *
  * @author Miguel Gamboa at CCISEL
  */
-public class WeatherParserFromFile {
+public class WeatherParserFromStream {
  
-    private static final String LISBON_HISTORY = "data/weather-lisbon-history.csv";
     
-    public static List<WeatherInfo> parseWeather(){
+    public static List<WeatherInfo> parseWeather(InputStream src){
         List<WeatherInfo> res = new ArrayList<>();
         
-        Iterator<String> lines = 
-                FileParser.parseResourceAsIterable(LISBON_HISTORY).iterator();
+        Iterator<String> lines = FileParser.parseResourceAsIterable(src).iterator();
         
         while(lines.next().startsWith("#"));
         

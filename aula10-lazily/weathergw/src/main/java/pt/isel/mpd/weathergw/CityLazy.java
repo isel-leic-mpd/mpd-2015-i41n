@@ -16,9 +16,9 @@
  */
 package pt.isel.mpd.weathergw;
 
-import java.text.ParseException;
 import java.util.List;
 import java.util.function.Supplier;
+import pt.isel.mpd.util.LazyInit;
 
 /**
  *
@@ -27,17 +27,13 @@ import java.util.function.Supplier;
 public class CityLazy {
     
     private final String cityName;
-    private Supplier<List<WeatherInfo>> history;
     private final IWeatherParser parser;
+    private Supplier<List<WeatherInfo>> history;
 
     public CityLazy(String cityName, IWeatherParser parse){
         this.parser = parse;
         this.cityName = cityName;
-        this.history = () ->{
-            List<WeatherInfo> tmp = parser.parseWeather();
-            history = () -> tmp;
-            return tmp;
-        };
+        this.history = LazyInit.lazily(() -> parser.parseWeather());
     }
     
     public List<WeatherInfo> getWeatherHistory(){

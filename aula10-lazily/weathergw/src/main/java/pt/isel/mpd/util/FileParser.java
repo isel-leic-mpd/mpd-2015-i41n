@@ -18,6 +18,7 @@ package pt.isel.mpd.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import static java.lang.ClassLoader.getSystemResourceAsStream;
 import java.util.ArrayList;
@@ -33,15 +34,14 @@ public class FileParser {
      * TPC: Implementar um Iterable lazy que retorna as linhas do resource na
      * forma de Strings. NÃO podem instanciar arrays nem colecções sauxiliares.
      */
-    public static Iterable<String> parseResourceAsIterable(final String path){
+    public static Iterable<String> parseResourceAsIterable(final InputStream src){
  
         return new Iterable<String>() {
             @Override
             public Iterator<String> iterator() {
                 return new Iterator<String>() {
                     
-                    final BufferedReader in = new BufferedReader(new InputStreamReader(
-                        getSystemResourceAsStream(path)));
+                    final BufferedReader in = new BufferedReader(new InputStreamReader(src));
                     boolean streamClosed = false;
                     
                     @Override

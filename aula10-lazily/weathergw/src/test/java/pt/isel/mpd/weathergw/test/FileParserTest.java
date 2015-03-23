@@ -14,27 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package pt.isel.mpd.weathergw;
+package pt.isel.mpd.weathergw.test;
 
-import java.text.ParseException;
-import java.util.List;
+import java.io.IOException;
+import static java.lang.ClassLoader.getSystemResourceAsStream;
+import junit.framework.Assert;
+import junit.framework.TestCase;
+import pt.isel.mpd.util.FileParser;
 
 /**
  *
  * @author Miguel Gamboa at CCISEL
  */
-public class App {
+public class FileParserTest extends TestCase{
     
-    public static void print(List<WeatherInfo> src){
-        for (WeatherInfo l : src) {
-            System.out.println(l);
+    public void test_read_all_lines_from_resource_weather_data() throws IOException {
+        Iterable<String> lines = 
+                FileParser.parseResourceAsIterable(getSystemResourceAsStream("data/weather-lisbon-history.csv"));
+        int count = 0;
+        for (String line : lines) {
+            count++;
         }
-    }
-    
-    public static void main(String [] args) throws ParseException{
-        // List<WeatherInfo> l = WeatherParser.parseWeather();
-        
-        City lis = new City("Lisbon", WeatherParserFromFile::parseWeather);
-        System.out.println(lis.getWeatherHistory());
+        Assert.assertEquals(72, count);
     }
 }

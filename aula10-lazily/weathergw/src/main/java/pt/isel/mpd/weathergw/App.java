@@ -16,39 +16,34 @@
  */
 package pt.isel.mpd.weathergw;
 
-import pt.isel.mpd.util.FileParser;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  *
  * @author Miguel Gamboa at CCISEL
  */
-public class WeatherParserFromFile {
- 
-    private static final String LISBON_HISTORY = "data/weather-lisbon-history.csv";
+public class App {
     
-    public static List<WeatherInfo> parseWeather(){
-        List<WeatherInfo> res = new ArrayList<>();
-        
-        Iterator<String> lines = 
-                FileParser.parseResourceAsIterable(LISBON_HISTORY).iterator();
-        
-        while(lines.next().startsWith("#"));
-        
-        while(lines.hasNext()){
-            lines.next(); // Skip Not Available or Daily Info
-            String line = lines.next();     
-            WeatherInfo info;
-            try {
-                info = WeatherInfo.valueOf(line);
-            } catch (ParseException ex) {
-                throw new RuntimeException(ex);
-            }
-            res.add(info);
+    public static void print(List<WeatherInfo> src){
+        for (WeatherInfo l : src) {
+            System.out.println(l);
         }
-        return res;
+    }
+    
+    public static void main(String [] args) throws ParseException{
+        // List<WeatherInfo> l = WeatherParser.parseWeather();
+        
+        Consumer<String> c;
+        
+        
+        IWeatherParser p = WeatherParserFromFile::parseWeather;
+        
+        City lis = new City(
+                "Lisbon", 
+                WeatherParserFromHttp::parseWeather);
+        
+        System.out.println(lis.getWeatherHistory());
     }
 }
