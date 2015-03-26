@@ -10,11 +10,11 @@
 |33001|Pedro António Rosário Pereira|0|0|
 |33017|Edgar Filipe Lima Alves|0|0|
 |33416|Tiago Alves Amorim|0|0|
-|33684|Pedro Manuel Ramos Lima|0|0|
+|33684|Pedro Manuel Ramos Lima|1|10|
 |33733|David Marques Rito|0|0|
 |35368|Joao David Sebastiao de Deus|0|0|
 |35383|FLÁVIO FERNANDO CADETE BALADÃO|0|0|
-|35390|João Paulo Pedro Vinhais|0|0|
+|35390|João Paulo Pedro Vinhais|1|0|
 |35460|JOEL FERNANDO PIRES RODRIGUES|1|0|
 |36238|Diogo Rafael Esteves Poeira|0|0|
 |36830|Mariana Filipe Nascimento Santos|0|0|
@@ -38,7 +38,7 @@
 |38862|Ivo Alexandre Rodrigues Correia|1|10|
 |39119|DANIEL SOBRAL SILVA|1|10|
 |39197|Daniela Filipa Garcia de Almeida|0|0|
-|39204|André Akshei Manoje Ramanlal|0|0|
+|39204|André Akshei Manoje Ramanlal|1|0|
 |39246|Pedro Miguel de Sousa Silva|1|0|
 |39252|Tiago Calixto Pires Pedreira Cardoso|0|0|
 |39256|Catarina Alexandra Lopes Mendes|0|0|
