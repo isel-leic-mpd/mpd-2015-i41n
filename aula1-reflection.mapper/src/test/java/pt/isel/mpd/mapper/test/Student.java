@@ -22,10 +22,11 @@ package pt.isel.mpd.mapper.test;
  */
 public class Student {
 
-    int nr;
-    String name;
-    String course;
+    private int nr;
+    private String name;
+    private String course;
 
+    public Student(){}
     public Student(int nr, String name, String course) {
         this.nr = nr;
         this.name = name;

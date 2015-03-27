@@ -17,7 +17,9 @@ package pt.isel.mpd.mapper.test;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import junit.framework.Assert;
 import junit.framework.TestCase;
+import pt.isel.mpd.mapper.AutoMapper;
 
 /**
  *
@@ -25,10 +27,12 @@ import junit.framework.TestCase;
  */
 public class AutoMapperTest extends TestCase {
     
-    public AutoMapperTest(String testName) {
-        super(testName);
+    public void test_mapping_properties_to_fields() throws Exception {
+        Student s1 = new Student(76523, "Ze Batata", "Ferrugem das Varas");
+        StudentDto s2 = AutoMapper.map(s1, StudentDto.class);
+        
+        Assert.assertEquals(s1.getNr(), s2.nr);
+        Assert.assertEquals(s1.getName(), s2.name);
+        Assert.assertEquals(s1.getCourse(), s2.course);
     }
-
-    // TODO add test methods here. The name must begin with 'test'. For example:
-    // public void testHello() {}
 }

@@ -26,6 +26,10 @@ public class StudentDto {
     final String name;
     final String course;
 
+    public StudentDto(){
+        this(0, null, null);
+    }
+    
     public StudentDto(int nr, String name, String course) {
         this.nr = nr;
         this.name = name;

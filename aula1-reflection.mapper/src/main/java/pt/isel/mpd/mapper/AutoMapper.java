@@ -35,7 +35,8 @@ public class AutoMapper {
         for (Method g : getters) {
             if(g.getName().startsWith("get")){
                 Object val = g.invoke(src, null);
-                Field f = destKlass.getField(g.getName().substring(3).toLowerCase());
+                Field f = destKlass.getDeclaredField(
+                        g.getName().substring(3).toLowerCase());
                 f.setAccessible(true);
                 f.set(dest, val);
             }
