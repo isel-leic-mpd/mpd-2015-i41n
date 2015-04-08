@@ -21,12 +21,12 @@
 |36832|PEDRO MIGUEL JORGE DUARTE|0|0|
 |36833|Marcelo Alexandre Bernardino da Silva|1|0|
 |36836|MANUEL FRANCISCO DIAS MARQUES|0|0|
-|36845|Pedro Miguel Curinha Nogueira|0|0|
+|36845|Pedro Miguel Curinha Nogueira|0|10|
 |36848|Joao Filipe Fonseca Borges|1|0|
 |36911|José Filipe Leandro Neves|0|0|
 |36925|Ruben David Nabais dos Santos|0|0|
 |36929|Jorge Miguel Silva Oliveira|1|0|
-|37317|EDGAR DA GONÇALVES CARUÇO|1|0|
+|37317|EDGAR DA GONÇALVES CARUÇO|1|10|
 |37331|Ana Sofia Sorrilha Ferreira Rodrigues|0|0|
 |38210|Marco Malaquias Moreira|1|0|
 |38252|Joana Filipa de Oliveira Coelho|0|0|
