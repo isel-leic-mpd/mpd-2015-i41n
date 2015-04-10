@@ -36,7 +36,7 @@
 |38834|Heral Mukesh|0|0|
 |38851|Ricardo Jorge Gonçalinho Cardoso|1|0|
 |38862|Ivo Alexandre Rodrigues Correia|1|10|
-|39119|DANIEL SOBRAL SILVA|1|10|
+|39119|DANIEL SOBRAL SILVA|1|20|
 |39197|Daniela Filipa Garcia de Almeida|0|0|
 |39204|André Akshei Manoje Ramanlal|1|0|
 |39246|Pedro Miguel de Sousa Silva|1|0|
