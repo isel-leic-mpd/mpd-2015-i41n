@@ -17,8 +17,9 @@
 package pt.isel.mpd.weathergw;
 
 import java.text.ParseException;
+import java.util.Comparator;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  *
@@ -31,19 +32,45 @@ public class App {
             System.out.println(l);
         }
     }
-    
+
+    static class ReversableCmp<T, R extends Comparable<R>> implements Comparator<T>{
+
+        private final Function<T, R> sup;
+
+        public ReversableCmp(Function<T, R> sup) {
+            this.sup = sup;
+        }
+
+        @Override
+        public int compare(T o1, T o2) {
+            return sup.apply(o1).compareTo(sup.apply(o2));
+        }
+
+        @Override
+        public Comparator<T> reversed() {
+            return (o1, o2) -> compare(o2, o1);
+        }
+
+        public <R2 extends Comparable<R2>> Comparator<T> andThen(Function<T, R2> sup) {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    static <T, R extends Comparable<R>> ReversableCmp<T, R> comparing(Function<T, R> sup){
+        return new ReversableCmp<>(sup);
+    }
+
     public static void main(String [] args) throws ParseException{
-        // List<WeatherInfo> l = WeatherParser.parseWeather();
-        
-        Consumer<String> c;
-        
-        
-        IWeatherParser p = WeatherParserFromFile::parseWeather;
-        
-        City lis = new City(
+
+        CityLazy lis = new CityLazy(
                 "Lisbon", 
                 WeatherParserFromHttp::parseWeather);
-        
-        System.out.println(lis.getWeatherHistory());
+
+        List<WeatherInfo> h = lis.getWeatherHistory();
+        // h.sort((w1, w2) -> ((Double)w1.precipMM).compareTo(w2.precipMM));
+        // h.sort((w1, w2) -> w1.weatherDesc.compareTo(w2.weatherDesc));
+        // h.sort(comparing( WeatherInfo::getTempC).reversed());
+        h.sort(comparing( WeatherInfo::getTempC).andThen( WeatherInfo::getPrecipMM));
+        print(h);
     }
 }

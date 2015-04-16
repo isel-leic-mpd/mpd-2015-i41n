@@ -43,6 +43,26 @@ public class WeatherInfo {
         this.feelsLikeC = feelsLikeC;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public int getTempC() {
+        return tempC;
+    }
+
+    public String getWeatherDesc() {
+        return weatherDesc;
+    }
+
+    public double getPrecipMM() {
+        return precipMM;
+    }
+
+    public int getFeelsLikeC() {
+        return feelsLikeC;
+    }
+
     @Override
     public String toString() {
         return "LocalInfo{" + "date=" + date + ", tempC=" + tempC + ", weatherDesc=" + weatherDesc + ", precipMM=" + precipMM + ", feelsLikeC=" + feelsLikeC + '}';
