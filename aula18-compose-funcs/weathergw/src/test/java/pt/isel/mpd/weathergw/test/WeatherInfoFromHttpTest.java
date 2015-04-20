@@ -32,6 +32,6 @@ public class WeatherInfoFromHttpTest extends TestCase{
                 "Lisbon", 
                 WeatherParserFromHttp::parseWeather);
         
-        Assert.assertEquals(29, lis.getWeatherHistory().size());
+        Assert.assertEquals(35, lis.getWeatherHistory().size());
     }
 }

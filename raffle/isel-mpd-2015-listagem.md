@@ -16,7 +16,7 @@
 |35383|FLÁVIO FERNANDO CADETE BALADÃO|0|0|
 |35390|João Paulo Pedro Vinhais|1|0|
 |35460|JOEL FERNANDO PIRES RODRIGUES|1|0|
-|36238|Diogo Rafael Esteves Poeira|0|0|
+|36238|Diogo Rafael Esteves Poeira|1|10|
 |36830|Mariana Filipe Nascimento Santos|0|0|
 |36832|PEDRO MIGUEL JORGE DUARTE|0|0|
 |36833|Marcelo Alexandre Bernardino da Silva|1|0|

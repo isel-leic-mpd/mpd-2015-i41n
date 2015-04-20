@@ -17,10 +17,11 @@
 package pt.isel.mpd.weathergw.test;
 
 import java.util.List;
+import java.util.function.Function;
+
 import junit.framework.TestCase;
 import pt.isel.mpd.weathergw.City;
 import pt.isel.mpd.weathergw.CityLazy;
-import pt.isel.mpd.weathergw.IWeatherParser;
 import pt.isel.mpd.weathergw.WeatherInfo;
 import pt.isel.mpd.weathergw.WeatherParserFromFile;
 
@@ -30,25 +31,19 @@ import pt.isel.mpd.weathergw.WeatherParserFromFile;
  */
 public class TestCityLazyInit extends TestCase{
     
-    private static class MyCounter implements IWeatherParser{
+    private static class MyCounter implements Function<List<WeatherInfo>, List<WeatherInfo>> {
         int count;
-        private IWeatherParser parser;
-
-        public MyCounter(IWeatherParser parser) {
-            this.parser = parser;
-        }
-
         @Override
-        public List<WeatherInfo> parseWeather() {
+        public List<WeatherInfo> apply(List<WeatherInfo> data) {
             count++;
-            return parser.parseWeather();
+            return data;
         }
         
     }
 
     public void test_city_eager_init(){
-        MyCounter counter = new MyCounter(() -> WeatherParserFromFile.parseWeather());
-        City c = new City("Lisbon", counter);
+        MyCounter counter = new MyCounter();
+        City c = new City("Lisbon", counter.compose((cn) -> WeatherParserFromFile.parseWeather()));
         assertEquals(32, c.getWeatherHistory().size());
         assertEquals(32, c.getWeatherHistory().size());
         assertEquals(32, c.getWeatherHistory().size());
@@ -60,8 +55,8 @@ public class TestCityLazyInit extends TestCase{
      * SEM adicionar campos ao WeatherParser.
      */
     public void test_city_lazy_init(){
-        MyCounter counter = new MyCounter(() -> WeatherParserFromFile.parseWeather());
-        CityLazy c = new CityLazy("Lisbon", counter);
+        MyCounter counter = new MyCounter();
+        CityLazy c = new CityLazy("Lisbon", counter.compose((cn) -> WeatherParserFromFile.parseWeather()));
         assertEquals(32, c.getWeatherHistory().size());
         assertEquals(32, c.getWeatherHistory().size());
         assertEquals(32, c.getWeatherHistory().size());

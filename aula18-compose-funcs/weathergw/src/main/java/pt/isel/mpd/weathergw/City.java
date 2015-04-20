@@ -17,6 +17,7 @@
 package pt.isel.mpd.weathergw;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  *
@@ -25,14 +26,14 @@ import java.util.List;
 public class City {
     
     private final String cityName;
-    private final IWeatherParser parser;
+    private final Function<String, List<WeatherInfo>> parser;
 
-    public City(String cityName, IWeatherParser parse){
+    public City(String cityName, Function<String, List<WeatherInfo>> parse){
         this.parser = parse;
         this.cityName = cityName;
     }
     
     public List<WeatherInfo> getWeatherHistory(){
-        return parser.parseWeather();
+        return parser.apply(cityName);
     }
 }

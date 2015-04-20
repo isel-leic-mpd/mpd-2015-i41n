@@ -51,8 +51,15 @@ public class App {
             return (o1, o2) -> compare(o2, o1);
         }
 
-        public <R2 extends Comparable<R2>> Comparator<T> andThen(Function<T, R2> sup) {
-            throw new UnsupportedOperationException();
+        public <R2 extends Comparable<R2>> ReversableCmp<T, R2> andThen(Function<T, R2> sup2) {
+            ReversableCmp cmp2 = new ReversableCmp(sup2);
+            return new ReversableCmp<T, R2>(sup2){
+                @Override
+                public int compare(T o1, T o2) {
+                    int res = ReversableCmp.this.compare(o1, o2);
+                    return res != 0? res : cmp2.compare(o1, o2);
+                }
+            };
         }
     }
 
@@ -69,8 +76,18 @@ public class App {
         List<WeatherInfo> h = lis.getWeatherHistory();
         // h.sort((w1, w2) -> ((Double)w1.precipMM).compareTo(w2.precipMM));
         // h.sort((w1, w2) -> w1.weatherDesc.compareTo(w2.weatherDesc));
-        // h.sort(comparing( WeatherInfo::getTempC).reversed());
-        h.sort(comparing( WeatherInfo::getTempC).andThen( WeatherInfo::getPrecipMM));
-        print(h);
+        // h.sort(comparing(WeatherInfo::getTempC).reversed());
+        /*
+        h.sort(
+                comparing(WeatherInfo::getWeatherDesc).andThen(WeatherInfo::getTempC)
+                        .andThen(WeatherInfo::getPrecipMM));
+        */
+
+        h.sort(Comparator
+                        .comparing(WeatherInfo::getWeatherDesc)
+                        .thenComparing(WeatherInfo::getTempC)
+                        .thenComparing(WeatherInfo::getPrecipMM));
+
+                print(h);
     }
 }

@@ -27,11 +27,11 @@ import pt.isel.mpd.util.HttpGw;
 public class WeatherParserFromHttp {
  
     private static final String LISBON_HISTORY = 
-            "http://api.worldweatheronline.com/free/v2/past-weather.ashx?q=Lisbon&format=csv&date=2015-2-15&enddate=2015-3-15&tp=24&key=25781444d49842dc5be040ff259c5";
+            "http://api.worldweatheronline.com/free/v2/past-weather.ashx?q=%s&format=csv&date=2015-3-15&enddate=2015-4-18&tp=24&key=25781444d49842dc5be040ff259c5";
     
-    public static List<WeatherInfo> parseWeather(){
+    public static List<WeatherInfo> parseWeather(String cityName){
         return HttpGw.getData(
-                LISBON_HISTORY,
+                String.format(LISBON_HISTORY, cityName),
                 (HttpEntity resp) -> WeatherParserFromStream.parseWeather(resp.getContent()));
         
     }
