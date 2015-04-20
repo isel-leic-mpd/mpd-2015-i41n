@@ -43,7 +43,9 @@ public class TestCityLazyInit extends TestCase{
 
     public void test_city_eager_init(){
         MyCounter counter = new MyCounter();
-        City c = new City("Lisbon", counter.compose((cn) -> WeatherParserFromFile.parseWeather()));
+        Function<String, List<WeatherInfo>> parser = new WeatherParserFromFile();
+        parser = parser.andThen(counter);
+        City c = new City("Lisbon", parser);
         assertEquals(32, c.getWeatherHistory().size());
         assertEquals(32, c.getWeatherHistory().size());
         assertEquals(32, c.getWeatherHistory().size());
@@ -56,7 +58,7 @@ public class TestCityLazyInit extends TestCase{
      */
     public void test_city_lazy_init(){
         MyCounter counter = new MyCounter();
-        CityLazy c = new CityLazy("Lisbon", counter.compose((cn) -> WeatherParserFromFile.parseWeather()));
+        CityLazy c = new CityLazy("Lisbon", counter.compose(new WeatherParserFromFile()));
         assertEquals(32, c.getWeatherHistory().size());
         assertEquals(32, c.getWeatherHistory().size());
         assertEquals(32, c.getWeatherHistory().size());

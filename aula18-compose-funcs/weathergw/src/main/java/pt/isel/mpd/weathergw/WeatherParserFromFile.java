@@ -18,16 +18,17 @@ package pt.isel.mpd.weathergw;
 
 import static java.lang.ClassLoader.getSystemResourceAsStream;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  *
  * @author Miguel Gamboa at CCISEL
  */
-public class WeatherParserFromFile {
+public class WeatherParserFromFile implements Function<String, List<WeatherInfo>>{
  
     private static final String LISBON_HISTORY = "data/weather-lisbon-history.csv";
     
-    public static List<WeatherInfo> parseWeather(){
+    public List<WeatherInfo> apply(String cityName){
         return WeatherParserFromStream.parseWeather(getSystemResourceAsStream(LISBON_HISTORY));
     }
 }
