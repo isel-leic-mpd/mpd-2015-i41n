@@ -16,10 +16,17 @@
  */
 package pt.isel.mpd.weathergw;
 
+import pt.isel.mpd.util.Queries;
+
 import java.text.ParseException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
+
+import static java.lang.System.out;
+import static pt.isel.mpd.util.Queries.*;
 
 /**
  *
@@ -27,12 +34,6 @@ import java.util.function.Function;
  */
 public class App {
     
-    public static void print(List<WeatherInfo> src){
-        for (WeatherInfo l : src) {
-            System.out.println(l);
-        }
-    }
-
     static class ReversableCmp<T, R extends Comparable<R>> implements Comparator<T>{
 
         private final Function<T, R> sup;
@@ -84,10 +85,40 @@ public class App {
         */
 
         h.sort(Comparator
-                        .comparing(WeatherInfo::getWeatherDesc)
-                        .thenComparing(WeatherInfo::getTempC)
-                        .thenComparing(WeatherInfo::getPrecipMM));
+                .comparing(WeatherInfo::getWeatherDesc)
+                .thenComparing(WeatherInfo::getTempC)
+                .thenComparing(WeatherInfo::getPrecipMM));
 
-                print(h);
+        //foreach(h, System.out::println);
+
+        Consumer<String> counter = new Consumer<String>() {
+            int val = 0;
+            public void accept(String label) { out.println(label + val++); }
+        };
+
+/*
+        List<String> descs = limit(
+                    map(
+                        filter(
+                            h,
+                            w -> {counter.accept("Filtering... "); return w.getTempC() > 20;}),
+                        w -> {counter.accept("Mapping ... "); return w.getWeatherDesc();}),
+                    5);
+                    */
+
+        Stream<String> res = h.stream()
+                .filter(w -> {
+                    // counter.accept("Filtering... ");
+                    return w.getTempC() > 20;
+                })
+                .map(w -> {
+                    // counter.accept("Mapping ... ");
+                    return w.getWeatherDesc();})
+                ;
+
+        Iterable<String> descs =  distinct(res);
+        foreach(descs, out::println);
+
+        // res.forEach(out::println); // Depois de aplicada uma operação terminal não pode mais ser executado
     }
 }

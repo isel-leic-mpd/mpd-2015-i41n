@@ -16,18 +16,19 @@
  */
 package pt.isel.mpd.util;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  *
  * @author Miguel Gamboa at CCISEL
  */
 public class Queries {
-    public static <T> List<T> filter(
-        List<T> src, Predicate<T> criteria)
-    {
+
+    public static <T> List<T> filter( List<T> src, Predicate<T> criteria){
         List<T> res = new ArrayList<>();
         for (T l : src) {
             if (criteria.test(l)) {
@@ -35,5 +36,49 @@ public class Queries {
             }
         }
         return res;        
-    }    
+    }
+    public static <T, R> List<R> map(List<T> src, Function<T, R> c){
+        List<R> res = new ArrayList<>();
+        for (T item : src) {
+            res.add(c.apply(item)); // no exemplo do main ocorre um boxing
+        }
+        return res;
+    }
+
+    public static <T> void foreach(Iterable<T> src, Consumer<T> c){
+        for (T l : src) {
+            c.accept(l);
+        }
+    }
+
+    public static <T> List<T> limit(Iterable<T> src, int top) {
+        List<T> res = new ArrayList<>();
+        int i = 0;
+        for(T item : src){
+            if(i++ < top) res.add(item);
+            else break;
+        }
+        return res;
+    }
+
+    public static <T> Iterable<T> distinct(Stream<T> src) {
+
+        return () -> new Iterator<T>() {
+            Iterator<T> iter = src.iterator();
+            Set<T>  returned = new HashSet<>();
+
+            @Override
+            public boolean hasNext() {
+                return iter.hasNext();
+            }
+
+            @Override
+            public T next() {
+                T res = iter.next();
+                while(returned.contains(res) && iter.hasNext()) res = iter.next();
+                returned.add(res);
+                return res;
+            }
+        };
+    }
 }

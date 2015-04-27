@@ -6,17 +6,17 @@
 |30221|JOAO SEBASTIAO|0|0|
 |31531|Tiago Frederico Pereira Venturinha|0|0|
 |32008|Luis Pedro Morais Neves|1|10|
-|32676|Diogo Mota Bento|0|0|
+|32676|Diogo Mota Bento|1|0|
 |33001|Pedro António Rosário Pereira|0|0|
 |33017|Edgar Filipe Lima Alves|0|0|
 |33416|Tiago Alves Amorim|0|0|
 |33684|Pedro Manuel Ramos Lima|1|10|
 |33733|David Marques Rito|0|0|
-|35368|Joao David Sebastiao de Deus|0|0|
+|35368|Joao David Sebastiao de Deus|1|0|
 |35383|FLÁVIO FERNANDO CADETE BALADÃO|0|0|
 |35390|João Paulo Pedro Vinhais|1|0|
 |35460|JOEL FERNANDO PIRES RODRIGUES|1|0|
-|36238|Diogo Rafael Esteves Poeira|1|10|
+|36238|Diogo Rafael Esteves Poeira|1|20|
 |36830|Mariana Filipe Nascimento Santos|0|0|
 |36832|PEDRO MIGUEL JORGE DUARTE|0|0|
 |36833|Marcelo Alexandre Bernardino da Silva|1|0|
@@ -44,11 +44,11 @@
 |39256|Catarina Alexandra Lopes Mendes|0|0|
 |39265|José António Alves Miranda|1|10|
 |39303|Romil Harsadecumar Naggi|0|0|
-|39333|Pedro Miguel Perestrelo Santana|0|0|
+|39333|Pedro Miguel Perestrelo Santana|1|10|
 |39368|HOMÍLZIO TROVOADA DOS SANTOS|1|0|
 |39393|Edgar Filipe Moreira Demétrio|0|0|
 |39612|Hugo José Ribeiros do Pilar|1|0|
 |40838|LUIS MIGUEL DA CUNHA E SOUSA|0|0|
-|40909|DANIEL ALBERTO LOPES DIAS ROSA|0|0|
+|40909|DANIEL ALBERTO LOPES DIAS ROSA|1|0|
 |40911|DANIEL HENRIQUES MIRANDA|1|0|
 |40921|SÓNIA MARIA ABRANTES REIS|0|0|
