@@ -19,6 +19,7 @@ package pt.isel.mpd.weathergw;
 import pt.isel.mpd.util.Queries;
 
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
@@ -33,48 +34,8 @@ import static pt.isel.mpd.util.Queries.*;
  * @author Miguel Gamboa at CCISEL
  */
 public class App {
-    
-    static class ReversableCmp<T, R extends Comparable<R>> implements Comparator<T>{
 
-        private final Function<T, R> sup;
-
-        public ReversableCmp(Function<T, R> sup) {
-            this.sup = sup;
-        }
-
-        @Override
-        public int compare(T o1, T o2) {
-            return sup.apply(o1).compareTo(sup.apply(o2));
-        }
-
-        @Override
-        public Comparator<T> reversed() {
-            return (o1, o2) -> compare(o2, o1);
-        }
-
-        public <R2 extends Comparable<R2>> ReversableCmp<T, R2> andThen(Function<T, R2> sup2) {
-            ReversableCmp cmp2 = new ReversableCmp(sup2);
-            return new ReversableCmp<T, R2>(sup2){
-                @Override
-                public int compare(T o1, T o2) {
-                    int res = ReversableCmp.this.compare(o1, o2);
-                    return res != 0? res : cmp2.compare(o1, o2);
-                }
-            };
-        }
-    }
-
-    static <T, R extends Comparable<R>> ReversableCmp<T, R> comparing(Function<T, R> sup){
-        return new ReversableCmp<>(sup);
-    }
-
-    public static void main(String [] args) throws ParseException{
-
-        CityLazy lis = new CityLazy(
-                "Lisbon", 
-                WeatherParserFromHttp::parseWeather);
-
-        List<WeatherInfo> h = lis.getWeatherHistory();
+    public static void testComparators(List<WeatherInfo> h){
         // h.sort((w1, w2) -> ((Double)w1.precipMM).compareTo(w2.precipMM));
         // h.sort((w1, w2) -> w1.weatherDesc.compareTo(w2.weatherDesc));
         // h.sort(comparing(WeatherInfo::getTempC).reversed());
@@ -90,13 +51,15 @@ public class App {
                 .thenComparing(WeatherInfo::getPrecipMM));
 
         //foreach(h, System.out::println);
+    }
 
+    public static void testEageQueries(List<WeatherInfo> h){
         Consumer<String> counter = new Consumer<String>() {
             int val = 0;
             public void accept(String label) { out.println(label + val++); }
         };
 
-/*
+
         List<String> descs = limit(
                     map(
                         filter(
@@ -104,21 +67,33 @@ public class App {
                             w -> {counter.accept("Filtering... "); return w.getTempC() > 20;}),
                         w -> {counter.accept("Mapping ... "); return w.getWeatherDesc();}),
                     5);
-                    */
+    }
 
-        Stream<String> res = h.stream()
-                .filter(w -> {
-                    // counter.accept("Filtering... ");
-                    return w.getTempC() > 20;
-                })
-                .map(w -> {
-                    // counter.accept("Mapping ... ");
-                    return w.getWeatherDesc();})
-                ;
+    public static void main(String [] args) throws ParseException{
 
-        Iterable<String> descs =  distinct(res);
-        foreach(descs, out::println);
+        CityLazy lis = new CityLazy(
+                "Lisbon", 
+                new WeatherParserFromFile());
 
-        // res.forEach(out::println); // Depois de aplicada uma operação terminal não pode mais ser executado
+        List<WeatherInfo> h = lis.getWeatherHistory();
+
+        WeatherInfo wi = h.stream()
+                .filter(w -> w.getTempC() > 15)
+                .findFirst()
+                .orElse(null);
+        out.println(wi);
+
+        double avgTemp = Queries.average(h.stream(), WeatherInfo::getTempC);
+        out.println(avgTemp);
+
+
+        /*
+        List<String> data = Arrays.asList(null, "Ola", null, "isel", null, "super", null, "Ola", "super");
+        String res = data.stream()
+                .findAny()
+                .get();
+
+        out.println(res);
+        */
     }
 }

@@ -22,11 +22,22 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+
 /**
  *
  * @author Miguel Gamboa at CCISEL
  */
 public class Queries {
+
+    static <T, R extends Comparable<R>> ReversableCmp<T, R> comparing(Function<T, R> sup){
+        return new ReversableCmp<>(sup);
+    }
+
+    public static <T> double average(Stream<T> data, Function<T, Integer> prop){
+        return 0;
+    }
 
     public static <T> List<T> filter( List<T> src, Predicate<T> criteria){
         List<T> res = new ArrayList<>();
@@ -61,23 +72,36 @@ public class Queries {
         return res;
     }
 
-    public static <T> Iterable<T> distinct(Stream<T> src) {
+    public static <T> Iterable<T> distinct(Iterable<T> src) {
 
         return () -> new Iterator<T>() {
             Iterator<T> iter = src.iterator();
             Set<T>  returned = new HashSet<>();
+            Optional<T> nextItem = step();
+
+            private Optional<T> step(){
+                while(iter.hasNext()){
+                    T tmp = iter.next();
+                    if(!returned.contains(tmp))
+                        return of(tmp);
+                }
+                return empty();
+            }
 
             @Override
             public boolean hasNext() {
-                return iter.hasNext();
+                return nextItem.isPresent();
             }
 
             @Override
             public T next() {
-                T res = iter.next();
-                while(returned.contains(res) && iter.hasNext()) res = iter.next();
-                returned.add(res);
-                return res;
+                if(hasNext()) {
+                    T aux = nextItem.get();
+                    returned.add(aux);
+                    nextItem = step();
+                    return aux;
+                }
+                else throw new NoSuchElementException();
             }
         };
     }
