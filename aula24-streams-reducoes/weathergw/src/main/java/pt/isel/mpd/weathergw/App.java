@@ -80,21 +80,22 @@ public class App {
 
         List<WeatherInfo> h = lis.getWeatherHistory();
 
-        WeatherInfo wi = h.stream()
+        h.stream()
                 .filter(w -> w.getTempC() > 15)
                 .findFirst()
-                .orElse(null);
-        out.println(wi);
+                .ifPresent(w -> out.println(w));
 
-        Queries.repeat("Average foreach: ", () -> averageForeach(h.stream(), WeatherInfo::getTempC));
-        Queries.repeat("Average: ", () -> averageForeach(h.parallelStream(), WeatherInfo::getTempC));
 
-        Queries.repeat("Average reduce: ", () -> h.stream()
+        repeat("Average foreach: ", () -> averageForeach(h.stream(), WeatherInfo::getTempC));
+        repeat("Average: ", () -> averageForeach(h.parallelStream(), WeatherInfo::getTempC));
+
+        repeat("Average reduce: ", () -> h.stream()
                 .map(w -> new Averager(1, w.getTempC()))
-                .reduce(new Averager(0, 0), (prev, next) -> prev.add(next))
+                .reduce((prev, next) -> prev.add(next))
+                .get()
                 .average());
 
-        Queries.repeat("Average parallel: ", () -> h.parallelStream()
+        repeat("Average parallel: ", () -> h.parallelStream()
                 .map(w -> new Averager(1, w.getTempC()))
                 .reduce(new Averager(0, 0), (prev, next) -> prev.add(next))
                 .average());

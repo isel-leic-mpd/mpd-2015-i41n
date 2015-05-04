@@ -27,7 +27,7 @@
 |36925|Ruben David Nabais dos Santos|2|0|
 |36929|Jorge Miguel Silva Oliveira|2|0|
 |37317|EDGAR DA GONÇALVES CARUÇO|1|10|
-|37331|Ana Sofia Sorrilha Ferreira Rodrigues|1|0|
+|37331|Ana Sofia Sorrilha Ferreira Rodrigues|1|10|
 |38210|Marco Malaquias Moreira|2|0|
 |38252|Joana Filipa de Oliveira Coelho|2|10|
 |38482|Bruno Miguel Gomes Freitas|1|10|
