@@ -20,6 +20,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static java.util.Optional.empty;
@@ -35,8 +36,21 @@ public class Queries {
         return new ReversableCmp<>(sup);
     }
 
-    public static <T> double average(Stream<T> data, Function<T, Integer> prop){
-        return 0;
+    public static <T> double averageForeach(Stream<T> data, Function<T, Integer> prop){
+        MutableAverager ave = new MutableAverager();
+        data
+                .map(temp -> prop.apply(temp))
+                .forEach(temp -> ave.add(temp));
+        return ave.average();
+    }
+
+    public static <T> void repeat(String label, Supplier<T> sup){
+        System.out.print(label + ": ");
+        for (int i = 0; i < 10; i++) {
+            T res = sup.get();
+            System.out.print(res + " ");
+        }
+        System.out.println();
     }
 
     public static <T> List<T> filter( List<T> src, Predicate<T> criteria){

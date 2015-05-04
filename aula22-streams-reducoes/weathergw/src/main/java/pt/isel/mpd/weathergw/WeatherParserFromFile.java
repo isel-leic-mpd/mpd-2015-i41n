@@ -26,7 +26,7 @@ import java.util.function.Function;
  */
 public class WeatherParserFromFile implements Function<String, List<WeatherInfo>>{
  
-    private static final String LISBON_HISTORY = "data/weather-lisbon-history.csv";
+    private static final String LISBON_HISTORY = "data/weather-lisbon-history-long.csv";
     
     public List<WeatherInfo> apply(String cityName){
         return WeatherParserFromStream.parseWeather(getSystemResourceAsStream(LISBON_HISTORY));

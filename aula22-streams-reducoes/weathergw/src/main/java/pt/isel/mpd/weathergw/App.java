@@ -16,6 +16,7 @@
  */
 package pt.isel.mpd.weathergw;
 
+import pt.isel.mpd.util.Averager;
 import pt.isel.mpd.util.Queries;
 
 import java.text.ParseException;
@@ -69,6 +70,8 @@ public class App {
                     5);
     }
 
+
+
     public static void main(String [] args) throws ParseException{
 
         CityLazy lis = new CityLazy(
@@ -83,9 +86,18 @@ public class App {
                 .orElse(null);
         out.println(wi);
 
-        double avgTemp = Queries.average(h.stream(), WeatherInfo::getTempC);
-        out.println(avgTemp);
+        Queries.repeat("Average foreach: ", () -> averageForeach(h.stream(), WeatherInfo::getTempC));
+        Queries.repeat("Average: ", () -> averageForeach(h.parallelStream(), WeatherInfo::getTempC));
 
+        Queries.repeat("Average reduce: ", () -> h.stream()
+                .map(w -> new Averager(1, w.getTempC()))
+                .reduce(new Averager(0, 0), (prev, next) -> prev.add(next))
+                .average());
+
+        Queries.repeat("Average parallel: ", () -> h.parallelStream()
+                .map(w -> new Averager(1, w.getTempC()))
+                .reduce(new Averager(0, 0), (prev, next) -> prev.add(next))
+                .average());
 
         /*
         List<String> data = Arrays.asList(null, "Ola", null, "isel", null, "super", null, "Ola", "super");
