@@ -1,5 +1,4 @@
-import java.util.List;
-import java.util.Arrays;
+import java.util.*;
 
 class Trader{
     public final String name;
@@ -43,14 +42,78 @@ public class Transactions{
         );
     }
     public static void main(String [] args){
-        // 1. Find all transactions in the year 2011 and sort them by value (small to high).
-        // 2. What are all the unique cities where the traders work?
-        // 3. Find all traders from Cambridge and sort them by name.
-        // 4. Return a string of all traders’ names sorted alphabetically.
-        // 5. Are any traders based in Milan?
-        // 6. Print all transactions’ values from the traders living in Cambridge.
-        // 7. What’s the highest value of all the transactions?
-        // 8. Find the transaction with the smallest value. 
+        List<Transaction> trxs = init();
+        
+        System.out.println("1. Find all transactions in the year 2011 and sort them by value (small to high)");
+        trxs.stream()
+            .filter(t -> t.year == 2011)
+            .sorted(Comparator.comparing(t -> t.value))
+            .forEach(System.out::println);
+        
+        System.out.println("\n2. What are all the unique cities where the traders work?");
+        trxs.stream()
+            .map(t -> t.trader.city)
+            .distinct()
+            .forEach(System.out::println);
+        
+        System.out.println("\n3. Find all traders from Cambridge and sort them by name.");
+        trxs.stream()
+            .map(t -> t.trader)
+            .distinct()
+            .filter(t -> t.city.equals("Cambridge"))
+            .sorted(Comparator.comparing(t -> t.name))
+            .forEach(System.out::println);
+        
+        System.out.println("\n4. Return a string of all traders’ names sorted alphabetically.");
+        trxs.stream()
+            .map(t -> t.trader.name)
+            .distinct()
+            .sorted(String::compareTo)
+            .reduce((prev, curr) -> prev + " " + curr)
+            .ifPresent(System.out::println);
+            
+        System.out.println("\n5. Are any traders based in Milan?");
+        trxs.stream()
+            .map(t -> t.trader)
+            .filter(t -> t.city.equals("Milan"))
+            .findAny()
+            .ifPresent(System.out::println);
+                
+        System.out.println("\n6. Print all transactions’ values from the traders living in Cambridge.");
+        trxs.stream()
+            .filter(t -> t.trader.city.equals("Cambridge"))
+            .map(t -> t.value)
+            .forEach(System.out::println);
+        
+        System.out.println("\n7.a What's the highest value of all the transactions?");
+        trxs.stream()
+            .map(t -> t.value)
+            .sorted((v1, v2) -> v2 - v1)
+            .findFirst()
+            .ifPresent(System.out::println);
+            
+        System.out.println("\n7.b What's the highest value of all the transactions?");
+        trxs.stream()
+            .map(t -> t.value)
+            .max((v1, v2) -> v1 - v2)
+            .ifPresent(System.out::println);
+        
+        System.out.println("\n7.c What's the highest value of all the transactions?");
+        trxs.stream()
+            .map(t -> t.value)
+            .reduce((prev, next) -> prev > next ? prev : next)
+            .ifPresent(System.out::println);
+            
+        System.out.println("\n7.d What's the highest value of all the transactions?");
+        trxs.stream()
+            .map(t -> t.value)
+            .reduce(Integer::max)
+            .ifPresent(System.out::println);
+            
+        System.out.println("8. Find the transaction with the smallest value.");
+        trxs.stream()
+            .min((v1, v2) -> v1.value - v2.value)
+            .ifPresent(System.out::println);
         
     }
 }
