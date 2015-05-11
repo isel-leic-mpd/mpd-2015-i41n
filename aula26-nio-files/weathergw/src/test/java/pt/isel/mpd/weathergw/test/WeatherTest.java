@@ -34,7 +34,7 @@ public class WeatherTest extends TestCase{
     
     public void test_parse_weather_info() throws ParseException {
         List<WeatherInfo> l = new WeatherParserFromFile().apply("Lisbon");
-        Assert.assertEquals(32, l.size());
+        Assert.assertEquals(92, l.size());
     }
 
     /**
@@ -42,10 +42,10 @@ public class WeatherTest extends TestCase{
      */
     public void test_search_by_predicate_with_lambda() throws ParseException {
       List<WeatherInfo> src = new WeatherParserFromFile().apply("Lisbon");
-        Assert.assertEquals(5,
+        Assert.assertEquals(8,
                 Queries.filter(src, w -> w.tempC == 18).size());
         
-        Assert.assertEquals(13,
+        Assert.assertEquals(42,
                 Queries.filter(src, w -> w.weatherDesc.equals("Sunny")).size());
     }
     
@@ -54,9 +54,9 @@ public class WeatherTest extends TestCase{
      */ 
     public void test_search_by_generic_predicate() throws ParseException{
         List<WeatherInfo> src = new WeatherParserFromFile().apply("Lisbon");
-        Assert.assertEquals(5, 
+        Assert.assertEquals(8,
                 filter(src, w -> w.tempC == 18).size());
-        Assert.assertEquals(13, 
+        Assert.assertEquals(42,
                 filter(src, w -> w.weatherDesc.equals("Sunny")).size());
     }
 }
