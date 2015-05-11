@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -46,19 +47,14 @@ public class WeatherParserFromFile implements Function<String, Iterable<WeatherI
     }
 
     public Iterable<WeatherInfo> apply(String cityName){
-
-        try {
             OddLines oddLines = new OddLines();
-            return Files
-                    .lines(Paths.get(getSystemResource(LISBON_HISTORY).toURI()))
-                    .filter(l -> !l.startsWith("#"))
-                    .skip(1)
-                    .filter(oddLines::test)
-                    .map(WeatherInfo::valueOf)
-                    .collect(toList());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+            try(Stream<String> lines = Files.lines(Paths.get(getSystemResource(LISBON_HISTORY).toURI()))) {
+                return lines.filter(l -> !l.startsWith("#"))
+                        .skip(1)
+                        .filter(oddLines::test)
+                        .map(WeatherInfo::valueOf)
+                        .collect(toList());
+            } catch (Exception e) { throw new RuntimeException(e); }
 
     }
 }

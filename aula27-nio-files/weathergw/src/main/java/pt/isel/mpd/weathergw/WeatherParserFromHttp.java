@@ -16,33 +16,23 @@
  */
 package pt.isel.mpd.weathergw;
 
-import java.io.InputStream;
-import static java.lang.ClassLoader.getSystemResourceAsStream;
-import pt.isel.mpd.util.FileParser;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import org.apache.http.HttpEntity;
+import pt.isel.mpd.util.HttpGw;
 
 /**
  *
  * @author Miguel Gamboa at CCISEL
  */
-public class WeatherParserFromStream {
+public class WeatherParserFromHttp {
  
+    private static final String LISBON_HISTORY = 
+            "http://api.worldweatheronline.com/free/v2/past-weather.ashx?q=%s&format=csv&date=2015-3-15&enddate=2015-4-18&tp=24&key=25781444d49842dc5be040ff259c5";
     
-    public static List<WeatherInfo> parseWeather(InputStream src){
-        List<WeatherInfo> res = new ArrayList<>();
+    public static List<WeatherInfo> parseWeather(String cityName){
+        return HttpGw.getData(
+                String.format(LISBON_HISTORY, cityName),
+                (HttpEntity resp) -> WeatherParserFromStream.parseWeather(resp.getContent()));
         
-        Iterator<String> lines = FileParser.parseResourceAsIterable(src).iterator();
-        
-        while(lines.next().startsWith("#"));
-        
-        while(lines.hasNext()){
-            lines.next(); // Skip Not Available or Daily Info
-            String line = lines.next();     
-            res.add(WeatherInfo.valueOf(line));
-        }
-        return res;
     }
 }

@@ -16,33 +16,28 @@
  */
 package pt.isel.mpd.weathergw;
 
-import java.io.InputStream;
-import static java.lang.ClassLoader.getSystemResourceAsStream;
-import pt.isel.mpd.util.FileParser;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import pt.isel.mpd.util.LazyInit;
 
 /**
  *
  * @author Miguel Gamboa at CCISEL
  */
-public class WeatherParserFromStream {
- 
+public class CityLazy {
     
-    public static List<WeatherInfo> parseWeather(InputStream src){
-        List<WeatherInfo> res = new ArrayList<>();
-        
-        Iterator<String> lines = FileParser.parseResourceAsIterable(src).iterator();
-        
-        while(lines.next().startsWith("#"));
-        
-        while(lines.hasNext()){
-            lines.next(); // Skip Not Available or Daily Info
-            String line = lines.next();     
-            res.add(WeatherInfo.valueOf(line));
-        }
-        return res;
+    private final String cityName;
+    private final Function<String, Iterable<WeatherInfo>> parser;
+    private Supplier<Iterable<WeatherInfo>> history;
+
+    public CityLazy(String cityName, Function<String, Iterable<WeatherInfo>> parse){
+        this.parser = parse;
+        this.cityName = cityName;
+        this.history = LazyInit.lazily(() -> parser.apply(cityName));
+    }
+    
+    public Iterable<WeatherInfo> getWeatherHistory(){
+        return history.get();
     }
 }
