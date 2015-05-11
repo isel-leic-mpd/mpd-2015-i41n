@@ -20,6 +20,8 @@ import java.text.ParseException;
 import java.util.List;
 import junit.framework.Assert;
 import junit.framework.TestCase;
+
+import static java.util.stream.StreamSupport.stream;
 import static pt.isel.mpd.util.Queries.filter;
 
 import pt.isel.mpd.util.Queries;
@@ -33,15 +35,15 @@ import pt.isel.mpd.weathergw.WeatherParserFromFile;
 public class WeatherTest extends TestCase{
     
     public void test_parse_weather_info() throws ParseException {
-        List<WeatherInfo> l = new WeatherParserFromFile().apply("Lisbon");
-        Assert.assertEquals(92, l.size());
+        Iterable<WeatherInfo> l = new WeatherParserFromFile().apply("Lisbon");
+        Assert.assertEquals(92, stream(l.spliterator(), false).count());
     }
 
     /**
      * 5th attempt
      */
     public void test_search_by_predicate_with_lambda() throws ParseException {
-      List<WeatherInfo> src = new WeatherParserFromFile().apply("Lisbon");
+      Iterable<WeatherInfo> src = new WeatherParserFromFile().apply("Lisbon");
         Assert.assertEquals(8,
                 Queries.filter(src, w -> w.tempC == 18).size());
         
@@ -53,7 +55,7 @@ public class WeatherTest extends TestCase{
      * 6th attempt
      */ 
     public void test_search_by_generic_predicate() throws ParseException{
-        List<WeatherInfo> src = new WeatherParserFromFile().apply("Lisbon");
+        Iterable<WeatherInfo> src = new WeatherParserFromFile().apply("Lisbon");
         Assert.assertEquals(8,
                 filter(src, w -> w.tempC == 18).size());
         Assert.assertEquals(42,

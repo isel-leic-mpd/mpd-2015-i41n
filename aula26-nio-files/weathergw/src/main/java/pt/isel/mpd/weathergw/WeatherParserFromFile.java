@@ -24,11 +24,11 @@ import java.util.function.Function;
  *
  * @author Miguel Gamboa at CCISEL
  */
-public class WeatherParserFromFile implements Function<String, List<WeatherInfo>>{
+public class WeatherParserFromFile implements Function<String, Iterable<WeatherInfo>>{
  
     private static final String LISBON_HISTORY = "data/weather-lisbon-history-long.csv";
     
-    public List<WeatherInfo> apply(String cityName){
+    public Iterable<WeatherInfo> apply(String cityName){
         return WeatherParserFromStream.parseWeather(getSystemResourceAsStream(LISBON_HISTORY));
     }
 }

@@ -26,8 +26,10 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static java.lang.System.out;
+import static java.util.stream.StreamSupport.stream;
 import static pt.isel.mpd.util.Queries.*;
 
 /**
@@ -70,22 +72,7 @@ public class App {
                     5);
     }
 
-
-
-    public static void main(String [] args) throws ParseException{
-
-        CityLazy lis = new CityLazy(
-                "Lisbon", 
-                new WeatherParserFromFile());
-
-        List<WeatherInfo> h = lis.getWeatherHistory();
-
-        h.stream()
-                .filter(w -> w.getTempC() > 15)
-                .findFirst()
-                .ifPresent(w -> out.println(w));
-
-
+    public static void testReduce(List<WeatherInfo> h){
         repeat("Average foreach: ", () -> averageForeach(h.stream(), WeatherInfo::getTempC));
         repeat("Average: ", () -> averageForeach(h.parallelStream(), WeatherInfo::getTempC));
 
@@ -100,13 +87,22 @@ public class App {
                 .reduce(new Averager(0, 0), (prev, next) -> prev.add(next))
                 .average());
 
-        /*
-        List<String> data = Arrays.asList(null, "Ola", null, "isel", null, "super", null, "Ola", "super");
-        String res = data.stream()
-                .findAny()
-                .get();
+    }
 
-        out.println(res);
-        */
+    public static void main(String [] args) throws ParseException{
+
+        CityLazy lis = new CityLazy(
+                "Lisbon",
+                new WeatherParserFromFile());
+
+        Iterable<WeatherInfo> h = lis.getWeatherHistory();
+
+        out.println(stream(h.spliterator(), false).count());
+
+        stream(h.spliterator(), false)
+                .filter(w -> w.getTempC() > 15)
+                .findFirst()
+                .ifPresent(w -> out.println(w));
+
     }
 }

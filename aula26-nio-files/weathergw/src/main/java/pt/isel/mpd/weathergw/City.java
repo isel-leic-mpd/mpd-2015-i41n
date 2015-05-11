@@ -26,14 +26,14 @@ import java.util.function.Function;
 public class City {
     
     private final String cityName;
-    private final Function<String, List<WeatherInfo>> parser;
+    private final Function<String, Iterable<WeatherInfo>> parser;
 
-    public City(String cityName, Function<String, List<WeatherInfo>> parse){
+    public City(String cityName, Function<String, Iterable<WeatherInfo>> parse){
         this.parser = parse;
         this.cityName = cityName;
     }
     
-    public List<WeatherInfo> getWeatherHistory(){
+    public Iterable<WeatherInfo> getWeatherHistory(){
         return parser.apply(cityName);
     }
 }

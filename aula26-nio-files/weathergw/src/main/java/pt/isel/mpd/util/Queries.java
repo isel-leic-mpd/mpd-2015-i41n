@@ -53,7 +53,7 @@ public class Queries {
         System.out.println();
     }
 
-    public static <T> List<T> filter( List<T> src, Predicate<T> criteria){
+    public static <T> List<T> filter( Iterable<T> src, Predicate<T> criteria){
         List<T> res = new ArrayList<>();
         for (T l : src) {
             if (criteria.test(l)) {

@@ -28,16 +28,16 @@ import pt.isel.mpd.util.LazyInit;
 public class CityLazy {
     
     private final String cityName;
-    private final Function<String, List<WeatherInfo>> parser;
-    private Supplier<List<WeatherInfo>> history;
+    private final Function<String, Iterable<WeatherInfo>> parser;
+    private Supplier<Iterable<WeatherInfo>> history;
 
-    public CityLazy(String cityName, Function<String, List<WeatherInfo>> parse){
+    public CityLazy(String cityName, Function<String, Iterable<WeatherInfo>> parse){
         this.parser = parse;
         this.cityName = cityName;
         this.history = LazyInit.lazily(() -> parser.apply(cityName));
     }
     
-    public List<WeatherInfo> getWeatherHistory(){
+    public Iterable<WeatherInfo> getWeatherHistory(){
         return history.get();
     }
 }

@@ -21,6 +21,8 @@ import junit.framework.TestCase;
 import pt.isel.mpd.weathergw.CityLazy;
 import pt.isel.mpd.weathergw.WeatherParserFromHttp;
 
+import static java.util.stream.StreamSupport.stream;
+
 /**
  *
  * @author Miguel Gamboa at CCISEL
@@ -32,6 +34,6 @@ public class WeatherInfoFromHttpTest extends TestCase{
                 "Lisbon", 
                 WeatherParserFromHttp::parseWeather);
         
-        Assert.assertEquals(35, lis.getWeatherHistory().size());
+        Assert.assertEquals(35, stream(lis.getWeatherHistory().spliterator(), false).count());
     }
 }

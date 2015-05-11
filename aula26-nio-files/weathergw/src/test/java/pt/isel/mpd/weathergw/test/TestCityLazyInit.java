@@ -25,16 +25,18 @@ import pt.isel.mpd.weathergw.CityLazy;
 import pt.isel.mpd.weathergw.WeatherInfo;
 import pt.isel.mpd.weathergw.WeatherParserFromFile;
 
+import static java.util.stream.StreamSupport.stream;
+
 /**
  *
  * @author Miguel Gamboa at CCISEL
  */
 public class TestCityLazyInit extends TestCase{
     
-    private static class MyCounter implements Function<List<WeatherInfo>, List<WeatherInfo>> {
+    private static class MyCounter implements Function<Iterable<WeatherInfo>, Iterable<WeatherInfo>> {
         int count;
         @Override
-        public List<WeatherInfo> apply(List<WeatherInfo> data) {
+        public Iterable<WeatherInfo> apply(Iterable<WeatherInfo> data) {
             count++;
             return data;
         }
@@ -43,12 +45,12 @@ public class TestCityLazyInit extends TestCase{
 
     public void test_city_eager_init(){
         MyCounter counter = new MyCounter();
-        Function<String, List<WeatherInfo>> parser = new WeatherParserFromFile();
+        Function<String, Iterable<WeatherInfo>> parser = new WeatherParserFromFile();
         parser = parser.andThen(counter);
         City c = new City("Lisbon", parser);
-        assertEquals(92, c.getWeatherHistory().size());
-        assertEquals(92, c.getWeatherHistory().size());
-        assertEquals(92, c.getWeatherHistory().size());
+        assertEquals(92, stream(c.getWeatherHistory().spliterator(), false).count());
+        assertEquals(92, stream(c.getWeatherHistory().spliterator(), false).count());
+        assertEquals(92, stream(c.getWeatherHistory().spliterator(), false).count());
         assertEquals(3, counter.count);
     }
    
@@ -59,9 +61,9 @@ public class TestCityLazyInit extends TestCase{
     public void test_city_lazy_init(){
         MyCounter counter = new MyCounter();
         CityLazy c = new CityLazy("Lisbon", counter.compose(new WeatherParserFromFile()));
-        assertEquals(92, c.getWeatherHistory().size());
-        assertEquals(92, c.getWeatherHistory().size());
-        assertEquals(92, c.getWeatherHistory().size());
+        assertEquals(92, stream(c.getWeatherHistory().spliterator(), false).count());
+        assertEquals(92, stream(c.getWeatherHistory().spliterator(), false).count());
+        assertEquals(92, stream(c.getWeatherHistory().spliterator(), false).count());
         assertEquals(1, counter.count);
     }
 }
