@@ -47,11 +47,10 @@ public class WeatherParserFromFile implements Function<String, Iterable<WeatherI
     }
 
     public Iterable<WeatherInfo> apply(String cityName){
-            OddLines oddLines = new OddLines();
             try(Stream<String> lines = Files.lines(Paths.get(getSystemResource(LISBON_HISTORY).toURI()))) {
                 return lines.filter(l -> !l.startsWith("#"))
                         .skip(1)
-                        .filter(oddLines::test)
+                        .filter(new OddLines<String>())
                         .map(WeatherInfo::valueOf)
                         .collect(toList());
             } catch (Exception e) { throw new RuntimeException(e); }
