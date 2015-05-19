@@ -127,5 +127,12 @@ public class App {
                                 WeatherInfo::getWeatherDesc,
                                 groupingBy(WeatherInfo::getTempC)));
         System.out.println( tempsByDescAndTemp);
+
+        // Number of Sunny Days and Rainny days and etc
+        Map<String, Long> nrOfDaysByDesc= stream(h.spliterator(), false)
+                .collect( groupingBy(WeatherInfo::getWeatherDesc, counting()));
+
+        System.out.println( nrOfDaysByDesc);
+
     }
 }
