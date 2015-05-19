@@ -20,15 +20,16 @@ import pt.isel.mpd.util.Averager;
 import pt.isel.mpd.util.Queries;
 
 import java.text.ParseException;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static java.lang.System.out;
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.*;
 import static java.util.stream.StreamSupport.stream;
 import static pt.isel.mpd.util.Queries.*;
 
@@ -89,6 +90,12 @@ public class App {
 
     }
 
+    private static <T> List<T> mergeList(List<T> l1, List<T> l2){
+        ArrayList<T> res = new ArrayList<>();
+        res.addAll(l1);
+        res.addAll(l2);
+        return res;
+    }
     public static void main(String [] args) throws ParseException{
 
         CityLazy lis = new CityLazy(
@@ -104,5 +111,21 @@ public class App {
                 .findFirst()
                 .ifPresent(w -> out.println(w));
 
+        Map<String, List<WeatherInfo>> tempsByDesc;
+        tempsByDesc = stream(h.spliterator(), false)
+                .collect( groupingBy(WeatherInfo::getWeatherDesc));
+        System.out.println( tempsByDesc);
+
+        // O mesmo que:
+        tempsByDesc = stream(h.spliterator(), false)
+                .collect( groupingBy(WeatherInfo::getWeatherDesc, toList()));
+        System.out.println( tempsByDesc);
+
+        Map<String, Map<Integer, List<WeatherInfo>>> tempsByDescAndTemp = stream(h.spliterator(), false)
+                .collect(
+                        groupingBy(
+                                WeatherInfo::getWeatherDesc,
+                                groupingBy(WeatherInfo::getTempC)));
+        System.out.println( tempsByDescAndTemp);
     }
 }
