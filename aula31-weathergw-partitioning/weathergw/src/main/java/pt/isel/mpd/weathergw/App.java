@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static java.lang.System.out;
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.*;
 import static java.util.stream.StreamSupport.stream;
@@ -111,28 +112,43 @@ public class App {
                 .findFirst()
                 .ifPresent(w -> out.println(w));
 
-        Map<String, List<WeatherInfo>> tempsByDesc;
-        tempsByDesc = stream(h.spliterator(), false)
-                .collect( groupingBy(WeatherInfo::getWeatherDesc));
-        System.out.println( tempsByDesc);
+        // Number of Sunny Days and Rainny days and etc
+        Map<String, Long> nrOfDaysByDesc= stream(h.spliterator(), false)
+                .collect(groupingBy(WeatherInfo::getWeatherDesc, counting()));
 
-        // O mesmo que:
-        tempsByDesc = stream(h.spliterator(), false)
-                .collect( groupingBy(WeatherInfo::getWeatherDesc, toList()));
-        System.out.println( tempsByDesc);
+        System.out.println(nrOfDaysByDesc);
 
-        Map<String, Map<Integer, List<WeatherInfo>>> tempsByDescAndTemp = stream(h.spliterator(), false)
+        //  temperaturas de um Stream<WeatherInfo> por descrição do estado do tempo
+        Map<String, List<Integer>> tempsByDesc = stream(h.spliterator(), false)
                 .collect(
                         groupingBy(
                                 WeatherInfo::getWeatherDesc,
-                                groupingBy(WeatherInfo::getTempC)));
-        System.out.println( tempsByDescAndTemp);
+                                reducing(
+                                        new ArrayList<>(),
+                                        w -> asList(w.getTempC()),
+                                        App::mergeList
+                                )
+                        )
+                );
+        System.out.println( tempsByDesc);
 
-        // Number of Sunny Days and Rainny days and etc
-        Map<String, Long> nrOfDaysByDesc= stream(h.spliterator(), false)
-                .collect( groupingBy(WeatherInfo::getWeatherDesc, counting()));
+        /// !!!! Muito Inefeciente
+        tempsByDesc = stream(h.spliterator(), false)
+                .collect(
+                        groupingBy(
+                                WeatherInfo::getWeatherDesc,
+                                collectingAndThen(toList(), l -> l.stream().map(WeatherInfo::getTempC).collect(toList()))
+                        )
+                );
+        System.out.println(tempsByDesc);
 
-        System.out.println( nrOfDaysByDesc);
+        tempsByDesc = stream(h.spliterator(), false)
+                .collect(
+                        groupingBy(
+                                WeatherInfo::getWeatherDesc,
+                                mapping(WeatherInfo::getTempC, toList()))
+                        );
 
+        System.out.println(tempsByDesc);
     }
 }
