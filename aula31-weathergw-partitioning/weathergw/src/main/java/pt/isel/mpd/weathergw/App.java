@@ -154,6 +154,65 @@ public class App {
                 .filter(w -> w.getTempC() > 15)
                 .findFirst()
                 .ifPresent(w -> out.println(w));
+
+        stream(h.spliterator(), false)
+                .collect(myPartitioningBy(w -> w.getWeatherDesc().equals("Sunny")))
+                .forEach((k, v) -> System.out.println((k ? "Sunny days: " : "Non sunny days") + " " + v.size()));
+
+        stream(h.spliterator(), false)
+                .collect(partitioningBy(w -> w.getWeatherDesc().equals("Sunny")))
+                .forEach((k, v) -> System.out.println(k + " " + v.size()));
+
+        stream(h.spliterator(), false)
+                .collect(groupingBy(w -> w.getWeatherDesc().equals("Sunny"), counting()))
+                .forEach((k, size) -> System.out.println(k + " " + size));
+
+    }
+
+    static <T> PartitionCollector<T> myPartitioningBy(Predicate<T> pred){
+        return new PartitionCollector<>(pred);
     }
 }
 
+class PartitionCollector<T> implements Collector<T, Map<Boolean, List<T>>, Map<Boolean, List<T>>> {
+
+    final Predicate<T> pred;
+
+    public PartitionCollector(Predicate<T> pred) {
+        this.pred = pred;
+    }
+
+    @Override
+    public Supplier<Map<Boolean, List<T>>> supplier() {
+        return () -> {
+            Map<Boolean, List<T>> res = new HashMap<>();
+            res.put(true, new ArrayList<>());
+            res.put(false, new ArrayList<>());
+            return res;
+        };
+    }
+
+    @Override
+    public BiConsumer<Map<Boolean, List<T>>, T> accumulator() {
+        return (map, elem) -> map.get(pred.test(elem)).add(elem);
+    }
+
+    @Override
+    public BinaryOperator<Map<Boolean, List<T>>> combiner() {
+        return (m1, m2) -> {
+            m1.get(true).addAll(m2.get(true));
+            m1.get(false).addAll(m2.get(false));
+            return m1;
+        };
+    }
+
+    @Override
+    public Function<Map<Boolean, List<T>>, Map<Boolean, List<T>>> finisher() {
+        return Function.identity();
+    }
+
+    @Override
+    public Set<Characteristics> characteristics() {
+        return Stream.of(IDENTITY_FINISH, UNORDERED).collect(toSet());
+    }
+}
