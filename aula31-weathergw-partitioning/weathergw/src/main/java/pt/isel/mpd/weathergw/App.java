@@ -21,8 +21,8 @@ import pt.isel.mpd.util.Queries;
 
 import java.text.ParseException;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.function.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -30,6 +30,8 @@ import java.util.stream.StreamSupport;
 import static java.lang.System.out;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.stream.Collector.Characteristics.IDENTITY_FINISH;
+import static java.util.stream.Collector.Characteristics.UNORDERED;
 import static java.util.stream.Collectors.*;
 import static java.util.stream.StreamSupport.stream;
 import static pt.isel.mpd.util.Queries.*;
@@ -91,27 +93,7 @@ public class App {
 
     }
 
-    private static <T> List<T> mergeList(List<T> l1, List<T> l2){
-        ArrayList<T> res = new ArrayList<>();
-        res.addAll(l1);
-        res.addAll(l2);
-        return res;
-    }
-    public static void main(String [] args) throws ParseException{
-
-        CityLazy lis = new CityLazy(
-                "Lisbon",
-                new WeatherParserFromFile());
-
-        Iterable<WeatherInfo> h = lis.getWeatherHistory();
-
-        out.println(stream(h.spliterator(), false).count());
-
-        stream(h.spliterator(), false)
-                .filter(w -> w.getTempC() > 15)
-                .findFirst()
-                .ifPresent(w -> out.println(w));
-
+    public static void testGrouping(Iterable<WeatherInfo> h){
         // Number of Sunny Days and Rainny days and etc
         Map<String, Long> nrOfDaysByDesc= stream(h.spliterator(), false)
                 .collect(groupingBy(WeatherInfo::getWeatherDesc, counting()));
@@ -147,8 +129,31 @@ public class App {
                         groupingBy(
                                 WeatherInfo::getWeatherDesc,
                                 mapping(WeatherInfo::getTempC, toList()))
-                        );
+                );
 
         System.out.println(tempsByDesc);
     }
+
+    private static <T> List<T> mergeList(List<T> l1, List<T> l2){
+        ArrayList<T> res = new ArrayList<>();
+        res.addAll(l1);
+        res.addAll(l2);
+        return res;
+    }
+    public static void main(String [] args) throws ParseException{
+
+        CityLazy lis = new CityLazy(
+                "Lisbon",
+                new WeatherParserFromFile());
+
+        Iterable<WeatherInfo> h = lis.getWeatherHistory();
+
+        out.println(stream(h.spliterator(), false).count());
+
+        stream(h.spliterator(), false)
+                .filter(w -> w.getTempC() > 15)
+                .findFirst()
+                .ifPresent(w -> out.println(w));
+    }
 }
+
