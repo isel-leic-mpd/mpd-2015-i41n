@@ -16,6 +16,9 @@
  */
 package pt.isel.mpd.monitrgw.app;
 
+import pt.isel.mpd.monitrgw.model.IMonitrMarketData;
+import pt.isel.mpd.monitrgw.service1.MonitrServiceEager;
+import pt.isel.mpd.monitrgw.service2.MonitrServiceLazy;
 import pt.isel.mpd.monitrgw.webapi.MonitrApi;
 
 import java.util.function.Supplier;
@@ -25,13 +28,27 @@ public class Program {
 
     public static void main(String[] args) throws InterruptedException {
 
-        System.out.println(MonitrApi.GetLastNews());
-        System.out.println(MonitrApi.GetStockDetails("AAPL"));
-        System.out.println(MonitrApi.GetStockAnalysis("VZ"));
+        MonitrApi.GetStockDetails("AAPL");
+
+        duration("Get last news: ", () -> System.out.println(MonitrApi.GetLastNews()));
+        duration("Get stock: ", () -> System.out.println(MonitrApi.GetStockDetails("AAPL")));
+        duration("Get analysis: ", () -> System.out.println(MonitrApi.GetStockAnalysis("VZ")));
 
         /**
          * IMonitrMarketData ---> IMonitrStockDetails --> IMonitrStockAnalysisData
          */
+        IMonitrMarketData news1 = duration("Get news Eager: ", () -> MonitrServiceEager
+                .GetLastNews() // 1 http request GetLasNews
+                .findFirst()
+                .get()); // 1 http request StockDetails + 1 hhtp reqiuesr Analysis
+
+        IMonitrMarketData news2 = MonitrServiceLazy
+                .GetLastNews() // 1 http request GetLasNews
+                .findFirst()
+                .get(); // 0 requests
+
+        news2.getStockDetails(); // 1 request
+        news2.getStockDetails(); // 0 request + ja foi CACHED
 
     }
 

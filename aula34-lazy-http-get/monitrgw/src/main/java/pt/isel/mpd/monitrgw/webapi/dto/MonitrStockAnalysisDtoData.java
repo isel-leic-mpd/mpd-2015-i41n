@@ -24,7 +24,7 @@ public class MonitrStockAnalysisDtoData {
     public final int positive;
     public final int negative;
 
-    public MonitrStockAnalysisDtoData(String stockSymbol, int mentions, int totalSentiment, int averageSentiment, int positive, int negative) {
+    public MonitrStockAnalysisDtoData(int mentions, int totalSentiment, int averageSentiment, int positive, int negative) {
         this.mentions = mentions;
         this.totalSentiment = totalSentiment;
         this.averageSentiment = averageSentiment;
