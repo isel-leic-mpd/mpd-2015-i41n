@@ -13,7 +13,8 @@ class App{
         // Async request 
         //
         Future<Double> req1 = getPriceAsync("bag");
-        Future<Double> req2 = getPriceAsync("t");
+        Future<Double> req2 = getPriceAsync("tablet");
+        
         System.out.println(req1.get());
         System.out.println(req2.get());
     }
@@ -34,7 +35,7 @@ class App{
     
     private static void delay() {
         try {
-            Thread.sleep(1000L);
+            Thread.sleep(3000L);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

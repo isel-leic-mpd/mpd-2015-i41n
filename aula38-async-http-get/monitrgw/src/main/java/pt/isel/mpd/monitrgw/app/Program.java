@@ -19,6 +19,7 @@ package pt.isel.mpd.monitrgw.app;
 import pt.isel.mpd.monitrgw.model.IMonitrMarketData;
 import pt.isel.mpd.monitrgw.service1.MonitrServiceEager;
 import pt.isel.mpd.monitrgw.service2.MonitrServiceLazy;
+import pt.isel.mpd.monitrgw.service3.MonitrServiceAsync;
 import pt.isel.mpd.monitrgw.webapi.MonitrApi;
 
 import java.util.function.Supplier;
@@ -41,7 +42,7 @@ public class Program {
         IMonitrMarketData news1 = duration("Get news Eager: ", () -> MonitrServiceEager
                 .GetLastNews() // 1 http request GetLasNews
                 .findFirst()
-                .get()); // 1 http request StockDetails + 1 hhtp reqiuesr Analysis
+                .get()); // 1 http request StockDetails + 1 hhtp request Analysis
 
         duration("Get stock details 1: ", () -> news1.getStockDetails()); // 0 request
         duration("Get stock details 2: ", () -> news1.getStockDetails()); // 0 request
@@ -50,13 +51,34 @@ public class Program {
                 .GetLastNews() // 1 http request GetLasNews
                 .findFirst()
                 .get()); // 0 requests
-
+        delay(500L);
+        System.out.println("Doing stuff....");
         duration("Get stock details 1: ", () -> news2.getStockDetails()); // 1 request
         duration("Get stock details 2: ", () -> news2.getStockDetails()); // 0 request + ja foi CACHED
         duration("Get stock analysis 1: ", () -> news2.getStockDetails().getAnalysis()); // 1 request
         duration("Get stock analysis 2: ", () -> news2.getStockDetails().getAnalysis()); // 0 request + ja foi CACHED
+
+
+        IMonitrMarketData news3 = duration("Get news Async: ", () -> MonitrServiceAsync
+                .GetLastNews() // 1 http request GetLasNews
+                .findFirst()
+                .get()); // 1 http request MonitrStockDetails --> 1 http request MonitrStockAnalysis
+        delay(500L);
+        System.out.println("Doing stuff....");
+        duration("Get stock details 1: ", () -> news3.getStockDetails()); // 0 request
+        duration("Get stock details 2: ", () -> news3.getStockDetails()); // 0 request + ja foi CACHED
+        duration("Get stock analysis 1: ", () -> news3.getStockDetails().getAnalysis()); // 0 request
+        duration("Get stock analysis 2: ", () -> news3.getStockDetails().getAnalysis()); // 0 request + ja foi CACHED
+
     }
 
+    private static void delay(long timeout) {
+        try {
+            Thread.sleep(timeout);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static void duration(String label, Runnable action){
         duration(label, () -> { action.run(); return null; });
